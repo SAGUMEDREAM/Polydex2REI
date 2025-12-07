@@ -5,7 +5,8 @@
 	"name": "Polydex2REI",
 	"description": "Bridge Polydex to REI",
 	"authors": [
-		"稀神灵梦"
+		"稀神灵梦",
+		"UncleTyrone"
 	],
 	"contact": {
 	},
@@ -24,8 +25,8 @@
 		"polydex2rei.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.16.0",
-		"minecraft": "~1.21.7",
+		"fabricloader": ">=0.17",
+		"minecraft": "~1.21.10",
 		"java": ">=21",
 		"fabric-api": "*",
 		"polymer-core": "*",
