@@ -61,16 +61,28 @@ public class ClientPolymerItemUtils {
         Optional<String> polymerStackId = getPolymerStackId(itemStack);
         Optional<String> polyMcStackId = getPolyMcStackId(itemStack);
         Optional<String> eivStackId = getEivStackId(itemStack);
+        Optional<String> itemModelId = getItemModelId(itemStack);
         if (polymerStackId.isPresent())
             return polymerStackId.get();
         if (polyMcStackId.isPresent())
             return polyMcStackId.get();
         if (eivStackId.isPresent())
             return eivStackId.get();
+        if (itemModelId.isPresent()) {
+            return itemModelId.get();
+        }
         if (itemStack.getItem() == Items.AIR) {
             return DEFAULT_ITEM_ID;
         }
         return Registries.ITEM.getId(itemStack.getItem()).toString();
+    }
+
+    public static Optional<String> getItemModelId(ItemStack itemStack) {
+        Identifier modelId = itemStack.get(DataComponentTypes.ITEM_MODEL);
+        if (modelId==null) {
+            return Optional.empty();
+        }
+        return Optional.of(modelId.toString());
     }
 
     public static Optional<String> getPolymerStackId(ItemStack itemStack) {

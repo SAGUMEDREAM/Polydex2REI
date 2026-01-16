@@ -1,9 +1,13 @@
 {
   "required": true,
   "package": "cc.thonly.polydex2rei.mixin",
+  "plugin": "cc.thonly.polydex2rei.Polydex2REIMixinPlugin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "ExampleMixin"
+    "ExampleMixin",
+    "RoughlyEnoughItemsNetworkMixin",
+    "ServerDisplayRegistryImplMixin",
+    "ViewSearchBuilderImplMixin"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -12,6 +16,14 @@
     "requireAnnotations": true
   },
   "client": [
-    "EntryWidgetMixin"
+    "ReiCompatibilityMixin",
+    "AbstractDisplayViewingScreenMixin",
+    "ClientHelperImplMixin",
+    "CompositeDisplayViewingScreenMixin",
+    "DefaultDisplayViewingScreenMixin",
+    "DisplayedEntryWidgetMixin",
+    "EntryWidgetMixin",
+    "ItemEntryDefinitionMixin",
+    "ScreenOverlayImplMixin"
   ]
 }

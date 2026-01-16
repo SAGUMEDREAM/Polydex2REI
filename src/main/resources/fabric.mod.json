@@ -5,8 +5,7 @@
 	"name": "Polydex2REI",
 	"description": "Bridge Polydex to REI",
 	"authors": [
-		"稀神灵梦",
-		"UncleTyrone"
+		"稀神灵梦"
 	],
 	"contact": {
 	},
@@ -15,10 +14,16 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-          "cc.thonly.polydex2rei.Polydex2REI"
+            "cc.thonly.polydex2rei.Polydex2REI"
+		],
+		"client": [
+			"cc.thonly.polydex2rei.Polydex2REIClient"
+		],
+		"rei_client": [
+			"cc.thonly.polydex2rei.plugin.Polydex2REIPlugin"
 		],
 		"fabric-datagen": [
-          "cc.thonly.polydex2rei.Polydex2REIDataGenerator"
+            "cc.thonly.polydex2rei.Polydex2REIDataGenerator"
 		]
 	},
 	"mixins": [
