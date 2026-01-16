@@ -11,7 +11,6 @@ public enum Action {
     RIGHT(1),
     MID(2);
 
-
     private final int id;
     public static final Map<Integer, Action> ENUM_MAP;
 
@@ -25,7 +24,8 @@ public enum Action {
 
     public static synchronized Action get(int id) {
         for (Action action : Action.values()) {
-            if (action.getId() != id) continue;
+            if (action.getId() != id)
+                continue;
             return action;
         }
         return LEFT;

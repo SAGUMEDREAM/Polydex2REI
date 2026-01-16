@@ -7,7 +7,7 @@ version = project.mod_version
 group = project.maven_group
 
 base {
-	archivesName = project.archives_base_name
+	archivesName = project.archives_base_name + "+" + project.minecraft_version
 }
 
 repositories {
@@ -81,9 +81,7 @@ dependencies {
 //	modRuntimeOnly files("libs/error-notifier-fabric-1.0.11.jar")
 
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:20.0.811"
-	modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin:20.0.811"
-	modCompileOnly "me.shedaniel:RoughlyEnoughItems-runtime:20.0.811"
-	modCompileOnly "me.shedaniel:RoughlyEnoughItems-fabric:20.0.811"
+	modImplementation "me.shedaniel:RoughlyEnoughItems-fabric:20.0.811"
 
 	compileOnly 'org.projectlombok:lombok:1.18.34'
 	modCompileOnly 'maven.modrinth:polydex:1.6.0+1.21.6'

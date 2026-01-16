@@ -1,24 +1,23 @@
 package cc.thonly.polydex2rei.mixin;
 
+import cc.thonly.polydex2rei.Polydex2REI;
 import cc.thonly.polydex2rei.network.Action;
-import cc.thonly.polydex2rei.network.StackActionPayload;
-import cc.thonly.polydex2rei.util.ClientPolymerItemUtils;
 import lombok.extern.slf4j.Slf4j;
 import me.shedaniel.rei.api.client.config.ConfigObject;
 import me.shedaniel.rei.api.client.gui.drag.DraggableStackProviderWidget;
 import me.shedaniel.rei.api.client.gui.widgets.Slot;
 import me.shedaniel.rei.api.common.entry.EntryStack;
 import me.shedaniel.rei.impl.client.gui.widget.EntryWidget;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Slf4j
+@Pseudo
 @Mixin(value = {EntryWidget.class})
 public abstract class EntryWidgetMixin
         extends Slot
@@ -29,36 +28,43 @@ public abstract class EntryWidgetMixin
     @Shadow(remap = false)
     public abstract EntryStack<?> getCurrentEntry();
 
-    @Inject(method = {"mouseClicked"}, at = {@At(value = "RETURN")}, cancellable = true)
+    @Inject(method = {"mouseClicked"}, at = {@At(value = "HEAD")})
     public void click(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
-        if (ConfigObject.getInstance().isCheating()) {
+        if (containsMouse(mouseX, mouseY)) {
+            EntryStack<?> stack = this.getCurrentEntry();
+            if (stack != null && !stack.isEmpty()) {
+                EntryStack<?> copy = stack.copy();
+                Object value = copy.getValue();
+                if (value instanceof ItemStack itemStack) {
+                    Polydex2REI.TARGET_ITEM_STACK = itemStack;
+                    Polydex2REI.ACTION = Action.ENUM_MAP.getOrDefault(button, Action.LEFT);
+//                    ItemUtils.printfItemStack(itemStack);
+                }
+            }
+        }
+    }
+
+    @Inject(
+            method = "keyPressed",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void onKeyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+        EntryStack<?> stack = getCurrentEntry();
+        if (stack == null || stack.isEmpty()) return;
+
+        Object value = stack.getValue();
+        if (!(value instanceof ItemStack itemStack)) return;
+
+        Polydex2REI.TARGET_ITEM_STACK = itemStack;
+
+        if (ConfigObject.getInstance().getRecipeKeybind().matchesKey(keyCode, scanCode)) {
+            Polydex2REI.ACTION = Action.LEFT;
             return;
         }
-        if (this.wasClicked) {
-            EntryStack<?> currentEntry = this.getCurrentEntry();
-            if (currentEntry == null) {
-                return;
-            }
-            EntryStack<?> itemStackEntryStack = currentEntry.cheatsAs();
-            if (itemStackEntryStack.isEmpty()) {
-                return;
-            }
-            Object object = itemStackEntryStack.getValue();
-            if (!(object instanceof ItemStack itemStack)) {
-                return;
-            }
-            if (ClientPolymerItemUtils.isPolyItem(itemStack)) {
-                String realItemId = ClientPolymerItemUtils.getRealItemId(itemStack);
-                Action action = Action.ENUM_MAP.getOrDefault(button, Action.LEFT);
-                MinecraftClient client = MinecraftClient.getInstance();
-                if (client.getNetworkHandler() == null) {
-                    log.warn("Cannot send payload: client not connected.");
-                    return;
-                }
-                StackActionPayload payload = new StackActionPayload(action, realItemId);
-                ClientPlayNetworking.send(payload);
-                cir.setReturnValue(false);
-            }
+
+        if (ConfigObject.getInstance().getUsageKeybind().matchesKey(keyCode, scanCode)) {
+            Polydex2REI.ACTION = Action.RIGHT;
         }
     }
 }

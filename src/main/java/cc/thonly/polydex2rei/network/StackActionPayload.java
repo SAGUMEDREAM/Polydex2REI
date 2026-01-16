@@ -14,8 +14,7 @@ public record StackActionPayload(Action action, String id) implements CustomPayl
 
     public static final PacketCodec<RegistryByteBuf, StackActionPayload> CODEC = PacketCodec.of(
             StackActionPayload::write,
-            StackActionPayload::read
-    );
+            StackActionPayload::read);
 
     private static StackActionPayload read(RegistryByteBuf buf) {
         try {

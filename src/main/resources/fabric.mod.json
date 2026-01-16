@@ -14,18 +14,24 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-          "cc.thonly.polydex2rei.Polydex2REI"
+            "cc.thonly.polydex2rei.Polydex2REI"
+		],
+		"client": [
+			"cc.thonly.polydex2rei.Polydex2REIClient"
+		],
+		"rei_client": [
+			"cc.thonly.polydex2rei.plugin.Polydex2REIPlugin"
 		],
 		"fabric-datagen": [
-          "cc.thonly.polydex2rei.Polydex2REIDataGenerator"
+            "cc.thonly.polydex2rei.Polydex2REIDataGenerator"
 		]
 	},
 	"mixins": [
 		"polydex2rei.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.16.0",
-		"minecraft": "~1.21.7",
+		"fabricloader": ">=0.17",
+		"minecraft": "~1.21.10",
 		"java": ">=21",
 		"fabric-api": "*",
 		"polymer-core": "*",

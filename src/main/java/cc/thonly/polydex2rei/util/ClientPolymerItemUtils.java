@@ -39,7 +39,7 @@ public class ClientPolymerItemUtils {
         return result;
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public static void applyIfPresent(ItemStack target, ItemStack source, ComponentType componentType) {
         if (source.get(componentType) != null) {
             target.set(componentType, source.get(componentType));
@@ -47,7 +47,8 @@ public class ClientPolymerItemUtils {
     }
 
     public static boolean isPolyItem(ItemStack itemStack) {
-        return getPolymerStackId(itemStack).isPresent() || getPolyMcStackId(itemStack).isPresent() || getEivStackId(itemStack).isPresent();
+        return getPolymerStackId(itemStack).isPresent() || getPolyMcStackId(itemStack).isPresent()
+                || getEivStackId(itemStack).isPresent();
     }
 
     public static String getRealItemId(ItemStack itemStack) {
@@ -60,13 +61,28 @@ public class ClientPolymerItemUtils {
         Optional<String> polymerStackId = getPolymerStackId(itemStack);
         Optional<String> polyMcStackId = getPolyMcStackId(itemStack);
         Optional<String> eivStackId = getEivStackId(itemStack);
-        if (polymerStackId.isPresent()) return polymerStackId.get();
-        if (polyMcStackId.isPresent()) return polyMcStackId.get();
-        if (eivStackId.isPresent()) return eivStackId.get();
+        Optional<String> itemModelId = getItemModelId(itemStack);
+        if (polymerStackId.isPresent())
+            return polymerStackId.get();
+        if (polyMcStackId.isPresent())
+            return polyMcStackId.get();
+        if (eivStackId.isPresent())
+            return eivStackId.get();
+        if (itemModelId.isPresent()) {
+            return itemModelId.get();
+        }
         if (itemStack.getItem() == Items.AIR) {
             return DEFAULT_ITEM_ID;
         }
         return Registries.ITEM.getId(itemStack.getItem()).toString();
+    }
+
+    public static Optional<String> getItemModelId(ItemStack itemStack) {
+        Identifier modelId = itemStack.get(DataComponentTypes.ITEM_MODEL);
+        if (modelId==null) {
+            return Optional.empty();
+        }
+        return Optional.of(modelId.toString());
     }
 
     public static Optional<String> getPolymerStackId(ItemStack itemStack) {
