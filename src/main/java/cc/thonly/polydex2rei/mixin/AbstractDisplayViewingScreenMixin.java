@@ -8,7 +8,6 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.impl.client.gui.screen.AbstractDisplayViewingScreen;
 import me.shedaniel.rei.impl.display.DisplaySpec;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;

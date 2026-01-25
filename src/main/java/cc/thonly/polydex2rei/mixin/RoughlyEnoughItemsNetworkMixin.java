@@ -10,6 +10,8 @@ import me.shedaniel.rei.api.common.entry.InputIngredient;
 import me.shedaniel.rei.api.common.transfer.info.stack.SlotAccessor;
 import me.shedaniel.rei.impl.common.transfer.InputSlotCrafter;
 import me.shedaniel.rei.impl.common.transfer.NewInputSlotCrafter;
+import net.minecraft.command.permission.Permission;
+import net.minecraft.command.permission.PermissionLevel;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -50,7 +52,7 @@ public abstract class RoughlyEnoughItemsNetworkMixin {
     @Inject(method = "lambda$onInitialize$1", at = @At("HEAD"), cancellable = true)
     private static void onInitializeGetItem(RegistryByteBuf buf, NetworkManager.PacketContext context, CallbackInfo ci) {
         ServerPlayerEntity player = (ServerPlayerEntity) context.getPlayer();
-        if (player.getPermissionLevel() < player.getEntityWorld().getServer().getOpPermissionLevel()) {
+        if (!player.getPermissions().hasPermission(new Permission.Level(PermissionLevel.GAMEMASTERS))) {
             player.sendMessage(Text.translatable("text.rei.no_permission_cheat").formatted(Formatting.RED), false);
             ci.cancel();
             return;
